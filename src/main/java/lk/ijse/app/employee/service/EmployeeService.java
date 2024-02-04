@@ -26,13 +26,14 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
-    public void saveEmployee(Employee employee){
+    public Employee saveEmployee(Employee employee){
         employee.setEmployeeCode(UUID.randomUUID().toString());
         employeeRepo.save(employee);
+        return employee;
     }
 
-    public void updateEmployee(Employee employee){
-        employeeRepo.save(employee);
+    public Employee updateEmployee(Employee employee){
+        return employeeRepo.save(employee);
     }
 
     public void deleteEmployee(Long id){
