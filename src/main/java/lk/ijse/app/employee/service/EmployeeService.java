@@ -4,7 +4,10 @@ import lk.ijse.app.employee.modal.Employee;
 import lk.ijse.app.employee.repo.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +46,9 @@ public class EmployeeService {
     public Employee getEmployeeById(Long id){
         return employeeRepo.findById(id).orElseThrow(()->
                 new RuntimeException("Employee not found for id: "+id));
+    }
+
+    public void uploadFile(MultipartFile file) throws IOException {
+        file.transferTo(new File("G:\\WorkZone\\SpringBootApp\\employee\\src\\main\\resources\\uploads\\"+file.getOriginalFilename()));
     }
 }
