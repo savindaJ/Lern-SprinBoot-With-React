@@ -46,11 +46,10 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/employee")
+    @PutMapping
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee){
-//        Employee employee1 = employeeService.updateEmployee(employee);
-//        System.out.println(employee1);
-        return new ResponseEntity<>(employee,HttpStatus.OK);
+        Employee employee1 = employeeService.updateEmployee(employee);
+        return new ResponseEntity<>(employee1,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
