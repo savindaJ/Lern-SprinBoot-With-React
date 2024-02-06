@@ -3,9 +3,23 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
 
 
 function EmployeeForm(props) {
+
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
   const [image, setImage] = useState(null);
 
@@ -22,25 +36,30 @@ function EmployeeForm(props) {
     <Box className="EmployeeForm">
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={6}>
-            <TextField id="outlined-basic" label="Employee ID" variant="outlined" />
+            <TextField sx={{width:'100%'}} id="outlined-basic" label="Employee ID" variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-            <TextField id="outlined-basic" label="Employee Name" variant="outlined" />
+            <TextField sx={{width:'100%'}} id="outlined-basic" label="Employee Name" variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-            <TextField id="outlined-basic" label="Employee Address" variant="outlined" />
+            <TextField sx={{width:'100%'}} id="outlined-basic" label="Employee Address" variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-            <TextField id="outlined-basic" label="Employee Basic" variant="outlined" />
+            <TextField sx={{width:'100%'}} id="outlined-basic" label="Employee Basic" variant="outlined" />
             </Grid>
-            <Grid item xs={6} margin={'auto'}>
-            <Button variant='contained'> 
-            <input type="file" accept="image/*" onChange={onImageChange} className="filetype" />
-            </Button>
+
+            <Grid item xs={12} margin={'auto'}>
+            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+            Add Image
+            <VisuallyHiddenInput type="file" accept="image/*" onChange={onImageChange}/>
+            </Button> 
             </Grid>
 
             <img className='image' alt="" src={image}/>
-        </Grid>
+
+            </Grid>
+
+            <Button sx={{marginLeft: '40vw'}} className='btnSave' variant='contained'>save</Button>
     </Box>
   );
 }
