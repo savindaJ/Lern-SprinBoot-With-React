@@ -30,7 +30,7 @@ public class EmployeeService {
     }
 
     public Employee saveEmployee(Employee employee){
-        employee.setEmployeeCode(UUID.randomUUID().toString());
+//        employee.setEmployeeCode(UUID.randomUUID().toString());
         employeeRepo.save(employee);
         return employee;
     }
@@ -49,6 +49,6 @@ public class EmployeeService {
     }
 
     public void uploadFile(MultipartFile file) throws IOException {
-        file.transferTo(new File("G:\\WorkZone\\SpringBootApp\\Crud\\employee\\src\\main\\java\\lk\\ijse\\app\\employee\\uploads\\"+file.getOriginalFilename()));
+        file.transferTo(new File("G:\\WorkZone\\SpringBootApp\\Crud\\frontend\\public\\uploads\\"+file.getOriginalFilename()));
     }
 }

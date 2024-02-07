@@ -20,14 +20,10 @@ import java.io.Serializable;
 @ToString
 public class Employee implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
-    private Long employeeId;
-    private String employeeCode;
+    private String email;
     private String name;
     private String address;
-    private String contact;
+    private String phone;
     private String imageUrl;
-    private String email;
-    private String jobTitle;
 }
