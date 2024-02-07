@@ -49,6 +49,6 @@ public class EmployeeService {
     }
 
     public void uploadFile(MultipartFile file) throws IOException {
-        file.transferTo(new File("G:\\WorkZone\\SpringBootApp\\employee\\src\\main\\resources\\uploads\\"+file.getOriginalFilename()));
+        file.transferTo(new File("G:\\WorkZone\\SpringBootApp\\Crud\\employee\\src\\main\\java\\lk\\ijse\\app\\employee\\uploads\\"+file.getOriginalFilename()));
     }
 }
