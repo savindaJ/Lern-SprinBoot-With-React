@@ -117,6 +117,7 @@ export default function EmployeeTable() {
        })
         .then(response => {
           console.log(response);
+          getAllEmployees();
           alert('Employee added successfully');
         })
         .catch(error => {
@@ -153,9 +154,65 @@ export default function EmployeeTable() {
 
       React.useEffect(() => {
         getAllEmployees();
-    }, []);
+      }, []);
 
-      // getAllEmployees();
+      function deleteEmployee(){
+        axios.delete('http://localhost:8080/spring/employee/delete/'+id)
+        .then(response => {
+          console.log(response);
+          alert('Employee deleted successfully');
+          getAllEmployees();
+        })
+        .catch(error => {
+          console.error('Error deleting employee', error);
+        });
+      }
+
+      function updateEmployee(){
+        
+        const json = {
+          email: email,
+          name: id,
+          address: address,
+          phone: name,
+          imageUrl: image.name
+        }
+  
+        const employee = JSON.stringify(json);
+  
+         axios.put('http://localhost:8080/spring/employee/', employee,{
+          headers: {
+            'Content-Type': 'application/json',
+          },
+         })
+          .then(response => {
+            console.log(response);
+            alert('Employee updated successfully');
+            getAllEmployees();
+          })
+          .catch(error => {
+            console.error('Error updating employee', error);
+          });
+
+          // if(file.name !== image.name){
+          //   console.log('file not update !!!!!!!!!!!!!!!!!!!!!');
+          //   const formData = new FormData();
+          //   formData.append('file', file);
+    
+          //   axios.post('http://localhost:8080/spring/employee/upload', formData, {
+          //     headers: {
+          //       'Content-Type': 'multipart/form-data',
+          //     },
+          //   })
+          //     .then(response => {
+          //       console.log('File uploaded successfully');
+          //       getAllEmployees();
+          //     })
+          //     .catch(error => {
+          //       console.error('Error uploading file', error);
+          //     });
+          // }
+      }
 
   return (
     
@@ -220,9 +277,9 @@ export default function EmployeeTable() {
                     {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
                     <Stack spacing={2} margin={2}>
                       <TextField variant="outlined" value={id} label="Name" onChange={e => setId(e.target.value)}></TextField>
-                      <TextField variant="outlined" value={address} label="Address" onChange={e => setId(e.target.value)}></TextField>
-                      <TextField variant="outlined" label="Email" value={email}></TextField>
-                      <TextField variant="outlined" label="Phone" value={name}></TextField>
+                      <TextField variant="outlined" value={address} label="Address" onChange={e => setAddress(e.target.value)}></TextField>
+                      <TextField variant="outlined" label="Email" value={email} onChange={e => setEmail(e.target.value)}></TextField>
+                      <TextField variant="outlined" label="Phone" value={name} onChange={e => setName(e.target.value)}></TextField>
                       <FormControlLabel control={<Checkbox defaultChecked color="primary"></Checkbox>} label="Agree terms & conditions"></FormControlLabel>
                       
                       <Grid item xs={12} margin={'auto'}>
@@ -233,7 +290,7 @@ export default function EmployeeTable() {
                       </Grid>
 
                       <img className='image' alt="" src={image}/>
-                      <Button color="primary" variant="contained">Submit</Button>
+                      <Button color="primary" variant="contained" onClick={updateEmployee}>Update Employee</Button>
                     </Stack>
                     
                       </DialogContent>

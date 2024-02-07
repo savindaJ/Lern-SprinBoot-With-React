@@ -3,7 +3,7 @@ import EmployeeForm from './EmployeeTable';
 function Employee() {
   return (
     <div>
-      <h1 className="em-mng">Welcome Employee Management System !</h1>
+      <h1 className="em-mng">Manage Your Employee...</h1>
       <EmployeeForm className='table'></EmployeeForm>
     </div>
   );
