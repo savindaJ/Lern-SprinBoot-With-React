@@ -15,7 +15,10 @@ export function setValues(){
 }
 
 
-function EmployeeForm() {
+function EmployeeForm({location}) {
+
+  const rowData = location.state?.data || {};
+  
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -62,6 +65,8 @@ function EmployeeForm() {
    const navigate = useNavigate();
 
   return (
+
+    console.log('comeData',rowData),
 
     <Box className="EmployeeForm">
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>

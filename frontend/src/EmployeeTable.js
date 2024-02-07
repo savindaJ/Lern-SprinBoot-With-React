@@ -10,10 +10,12 @@ import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import { useNavigate } from 'react-router-dom';
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Stack, TextField } from "@mui/material";
-
+// import { useHistory } from 'react-router-dom';
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import Grid from '@mui/material/Grid';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,13 +57,45 @@ export default function EmployeeTable() {
         openchange(false);
     }
 
-  // const my = 'employee.png';
+    const VisuallyHiddenInput = styled('input')({
+      clip: 'rect(0 0 0 0)',
+      clipPath: 'inset(50%)',
+      height: 1,
+      overflow: 'hidden',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      whiteSpace: 'nowrap',
+      width: 1,
+    });
+  
+    const [image, setImage] = React.useState(null);
 
-  const navigate = useNavigate();
+    const [id,setId]=React.useState(0);
+
+    const onImageChange = (event) => {
+      if (event.target.files && event.target.files[0]) {
+  
+        console.log('filee',event.target.files[0]);
+      
+        let url = URL.createObjectURL(event.target.files[0]);
+        console.log(url);
+        setImage(url);
+        let file = event.target.files[0];
+        console.log(file);  
+        console.log(URL.createObjectURL(event.target.files[0]));
+      }
+     }
 
   return (
+
+    <div>
+    <div className='btn-section'>
+            <IconButton aria-label="delete" onClick={functionopenpopup} >
+                <PersonAddAltOutlinedIcon  fontSize='large' className='btn'/>
+            </IconButton>
+    </div>
     <div className='table'>
-    
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead className='head'>
@@ -83,7 +117,11 @@ export default function EmployeeTable() {
               <StyledTableCell align="right">{row.fat}</StyledTableCell>
               <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">
-              <IconButton aria-label="delete" onClick={()=> navigate('/add')}>
+              <IconButton aria-label="delete" onClick={()=>{
+                functionopenpopup();
+                setId(row.name);
+                setImage(`http://localhost:3000/uploads/employee.png`);
+              }}>
                     <EditIcon sx={{color:'blue'}}/>
                 </IconButton>
 
@@ -105,19 +143,32 @@ export default function EmployeeTable() {
                 <DialogContent>
                     {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
                     <Stack spacing={2} margin={2}>
-                      <TextField variant="outlined" label="Username"></TextField>
-                      <TextField variant="outlined" label="Password"></TextField>
+                      <TextField variant="outlined" value={id} label="Name" onChange={e => setId(e.target.value)}></TextField>
+                      <TextField variant="outlined" label="Address"></TextField>
                       <TextField variant="outlined" label="Email"></TextField>
                       <TextField variant="outlined" label="Phone"></TextField>
                       <FormControlLabel control={<Checkbox defaultChecked color="primary"></Checkbox>} label="Agree terms & conditions"></FormControlLabel>
+                      
+                      <Grid item xs={12} margin={'auto'}>
+                      <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                      Add Image
+                      <VisuallyHiddenInput type="file" accept="image/*" onChange={onImageChange}/>
+                      </Button> 
+                      </Grid>
+
+                      <img className='image' alt="" src={image}/>
                       <Button color="primary" variant="contained">Submit</Button>
                     </Stack>
-                </DialogContent>
-                <DialogActions>
-                {/* <Button color="success" variant="contained">Yes</Button>
-                    <Button onClick={closepopup} color="error" variant="contained">Close</Button> */}
-                </DialogActions>
+                    
+                      </DialogContent>
+                      <DialogActions>
+                      {/* <Button color="success" variant="contained">Yes</Button>
+                          <Button onClick={closepopup} color="error" variant="contained">Close</Button> */}
+                      </DialogActions>
+
+                
             </Dialog>
+    </div>
     </div>
   );
 }
