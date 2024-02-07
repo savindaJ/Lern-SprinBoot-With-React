@@ -18,6 +18,7 @@ import java.util.List;
  * @since : 0.1.0
  **/
 @RestController
+@CrossOrigin
 @RequestMapping("/employee")
 public class EmployeeController {
 
