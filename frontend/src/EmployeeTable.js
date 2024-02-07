@@ -38,15 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0)
-];
 
 export default function EmployeeTable() {
 
@@ -82,6 +74,8 @@ export default function EmployeeTable() {
 
     const [file, setFile] = React.useState(null);
 
+    const [rows, setRows] = React.useState([]);
+
     const [id,setId]=React.useState('');
     const [name,setName]=React.useState('');
     const [address,setAddress]=React.useState('');
@@ -104,6 +98,31 @@ export default function EmployeeTable() {
      }
 
      function saveEmployee(){
+      console.log('file----',file, id, name, address, email);
+
+      const json = {
+        email: email,
+        name: id,
+        address: address,
+        phone: name,
+        imageUrl: file.name
+      }
+
+      const employee = JSON.stringify(json);
+
+       axios.post('http://localhost:8080/spring/employee/add', employee,{
+        headers: {
+          'Content-Type': 'application/json',
+        },
+       })
+        .then(response => {
+          console.log(response);
+          alert('Employee added successfully');
+        })
+        .catch(error => {
+          console.error('Error uploading file', error);
+        });
+
       const formData = new FormData();
       formData.append('file', file);
   
@@ -114,14 +133,32 @@ export default function EmployeeTable() {
       })
         .then(response => {
           console.log('File uploaded successfully');
+          getAllEmployees();
         })
         .catch(error => {
           console.error('Error uploading file', error);
         });
       }
 
-  return (
+      function getAllEmployees(){
+        axios.get('http://localhost:8080/spring/employee')
+        .then(response => {
+          console.log(response);
+          setRows(response.data);
+        })
+        .catch(error => {
+          console.error('Error getting all employees', error);
+        });
+      }
 
+      React.useEffect(() => {
+        getAllEmployees();
+    }, []);
+
+      // getAllEmployees();
+
+  return (
+    
     <div>
     <div className='btn-section'>
             <IconButton aria-label="delete" onClick={()=>{
@@ -147,19 +184,19 @@ export default function EmployeeTable() {
         <TableBody>
           {rows.map((row) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell align="left"><img className='employee-profile' alt='' src={`http://localhost:3000/uploads/employee.png`} /></StyledTableCell>
+              <StyledTableCell align="left"><img className='employee-profile' alt='' src={`http://localhost:3000/uploads/`+`${row.imageUrl}`} /></StyledTableCell>
               <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+              <StyledTableCell align="right">{row.address}</StyledTableCell>
+              <StyledTableCell align="right">{row.email}</StyledTableCell>
+              <StyledTableCell align="right">{row.phone}</StyledTableCell>
               <StyledTableCell align="right">
               <IconButton aria-label="delete" onClick={()=>{
                 functionopenpopup();
                 setId(row.name);
-                setAddress(row.calories);
-                setEmail(row.fat);
-                setName(row.carbs);
-                setImage(`http://localhost:3000/uploads/employee.png`);
+                setAddress(row.address);
+                setEmail(row.email);
+                setName(row.phone);
+                setImage(`http://localhost:3000/uploads/`+`${row.imageUrl}`);
               }}>
                     <EditIcon sx={{color:'blue'}}/>
                 </IconButton>
@@ -183,7 +220,7 @@ export default function EmployeeTable() {
                     {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
                     <Stack spacing={2} margin={2}>
                       <TextField variant="outlined" value={id} label="Name" onChange={e => setId(e.target.value)}></TextField>
-                      <TextField variant="outlined" value={address} label="Address"></TextField>
+                      <TextField variant="outlined" value={address} label="Address" onChange={e => setId(e.target.value)}></TextField>
                       <TextField variant="outlined" label="Email" value={email}></TextField>
                       <TextField variant="outlined" label="Phone" value={name}></TextField>
                       <FormControlLabel control={<Checkbox defaultChecked color="primary"></Checkbox>} label="Agree terms & conditions"></FormControlLabel>
