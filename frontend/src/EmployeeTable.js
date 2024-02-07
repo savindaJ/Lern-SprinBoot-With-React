@@ -16,6 +16,7 @@ import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Fo
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import Grid from '@mui/material/Grid';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -79,6 +80,8 @@ export default function EmployeeTable() {
   
     const [image, setImage] = React.useState(null);
 
+    const [file, setFile] = React.useState(null);
+
     const [id,setId]=React.useState('');
     const [name,setName]=React.useState('');
     const [address,setAddress]=React.useState('');
@@ -88,6 +91,8 @@ export default function EmployeeTable() {
       if (event.target.files && event.target.files[0]) {
   
         console.log('filee',event.target.files[0]);
+
+        setFile(event.target.files[0]);
       
         let url = URL.createObjectURL(event.target.files[0]);
         console.log(url);
@@ -99,7 +104,20 @@ export default function EmployeeTable() {
      }
 
      function saveEmployee(){
-        console.log('id',id,'name',name,'address',address,'email',email);
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      axios.post('http://localhost:8080/spring/employee/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(response => {
+          console.log('File uploaded successfully');
+        })
+        .catch(error => {
+          console.error('Error uploading file', error);
+        });
       }
 
   return (
@@ -219,6 +237,7 @@ export default function EmployeeTable() {
                         setAddress('');
                         setEmail('');
                         setName('');
+                        setImage(null);
                       }}>Submit</Button>
                     </Stack>
                     
