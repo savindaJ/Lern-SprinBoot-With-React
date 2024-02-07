@@ -57,6 +57,14 @@ export default function EmployeeTable() {
         openchange(false);
     }
 
+    const [save,saveChange]=React.useState(false);
+    const savePopUp=()=>{
+        saveChange(true);
+    }
+    const close=()=>{
+        saveChange(false);
+    }
+
     const VisuallyHiddenInput = styled('input')({
       clip: 'rect(0 0 0 0)',
       clipPath: 'inset(50%)',
@@ -71,7 +79,10 @@ export default function EmployeeTable() {
   
     const [image, setImage] = React.useState(null);
 
-    const [id,setId]=React.useState(0);
+    const [id,setId]=React.useState('');
+    const [name,setName]=React.useState('');
+    const [address,setAddress]=React.useState('');
+    const [email,setEmail]=React.useState('');
 
     const onImageChange = (event) => {
       if (event.target.files && event.target.files[0]) {
@@ -87,11 +98,18 @@ export default function EmployeeTable() {
       }
      }
 
+     function saveEmployee(){
+        console.log('id',id,'name',name,'address',address,'email',email);
+      }
+
   return (
 
     <div>
     <div className='btn-section'>
-            <IconButton aria-label="delete" onClick={functionopenpopup} >
+            <IconButton aria-label="delete" onClick={()=>{
+                savePopUp();
+                setImage(null);
+            }} >
                 <PersonAddAltOutlinedIcon  fontSize='large' className='btn'/>
             </IconButton>
     </div>
@@ -101,10 +119,10 @@ export default function EmployeeTable() {
         <TableHead className='head'>
           <TableRow >
           <StyledTableCell>Employee Profile</StyledTableCell>
-            <StyledTableCell>Employee ID</StyledTableCell>
-            <StyledTableCell align="right">Employee Name</StyledTableCell>
+            <StyledTableCell>Employee Name</StyledTableCell>
             <StyledTableCell align="right">Employee Address</StyledTableCell>
-            <StyledTableCell align="right">Employee Basic</StyledTableCell>
+            <StyledTableCell align="right">Employee Email</StyledTableCell>
+            <StyledTableCell align="right">Employee Phone</StyledTableCell>
             <StyledTableCell align="right">Option</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -120,6 +138,9 @@ export default function EmployeeTable() {
               <IconButton aria-label="delete" onClick={()=>{
                 functionopenpopup();
                 setId(row.name);
+                setAddress(row.calories);
+                setEmail(row.fat);
+                setName(row.carbs);
                 setImage(`http://localhost:3000/uploads/employee.png`);
               }}>
                     <EditIcon sx={{color:'blue'}}/>
@@ -139,14 +160,14 @@ export default function EmployeeTable() {
     <Dialog 
             // fullScreen 
             open={open} onClose={closepopup} fullWidth maxWidth="sm">
-                <DialogTitle>User Registeration  <IconButton onClick={closepopup} style={{float:'right'}}><CloseIcon color="primary"></CloseIcon></IconButton>  </DialogTitle>
+                <DialogTitle>Employee Update  <IconButton onClick={closepopup} style={{float:'right'}}><CloseIcon color="primary"></CloseIcon></IconButton>  </DialogTitle>
                 <DialogContent>
                     {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
                     <Stack spacing={2} margin={2}>
                       <TextField variant="outlined" value={id} label="Name" onChange={e => setId(e.target.value)}></TextField>
-                      <TextField variant="outlined" label="Address"></TextField>
-                      <TextField variant="outlined" label="Email"></TextField>
-                      <TextField variant="outlined" label="Phone"></TextField>
+                      <TextField variant="outlined" value={address} label="Address"></TextField>
+                      <TextField variant="outlined" label="Email" value={email}></TextField>
+                      <TextField variant="outlined" label="Phone" value={name}></TextField>
                       <FormControlLabel control={<Checkbox defaultChecked color="primary"></Checkbox>} label="Agree terms & conditions"></FormControlLabel>
                       
                       <Grid item xs={12} margin={'auto'}>
@@ -158,6 +179,47 @@ export default function EmployeeTable() {
 
                       <img className='image' alt="" src={image}/>
                       <Button color="primary" variant="contained">Submit</Button>
+                    </Stack>
+                    
+                      </DialogContent>
+                      <DialogActions>
+                      {/* <Button color="success" variant="contained">Yes</Button>
+                          <Button onClick={closepopup} color="error" variant="contained">Close</Button> */}
+                      </DialogActions>
+
+                
+            </Dialog>
+
+
+            <Dialog 
+            // fullScreen 
+            open={save} onClose={close} fullWidth maxWidth="sm">
+                <DialogTitle>Employee Registeration  <IconButton onClick={close} style={{float:'right'}}><CloseIcon color="primary"></CloseIcon></IconButton>  </DialogTitle>
+                <DialogContent>
+                    {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
+                    <Stack spacing={2} margin={2}>
+                      <TextField variant="outlined" label="Name" onChange={e => setId(e.target.value)}></TextField>
+                      <TextField variant="outlined" label="Address" onChange={e => setAddress(e.target.value)}></TextField>
+                      <TextField variant="outlined" label="Email" onChange={e => setEmail(e.target.value)}></TextField>
+                      <TextField variant="outlined" label="Phone" onChange={e => setName(e.target.value)}></TextField>
+                      <FormControlLabel control={<Checkbox defaultChecked color="primary"></Checkbox>} label="Agree terms & conditions"></FormControlLabel>
+                      
+                      <Grid item xs={12} margin={'auto'}>
+                      <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                      Add Image
+                      <VisuallyHiddenInput type="file" accept="image/*" onChange={onImageChange}/>
+                      </Button> 
+                      </Grid>
+
+                      <img className='image' alt="" src={image}/>
+                      <Button color="primary" variant="contained" onClick={()=>{
+                        saveEmployee();
+                        close();
+                        setId('');
+                        setAddress('');
+                        setEmail('');
+                        setName('');
+                      }}>Submit</Button>
                     </Stack>
                     
                       </DialogContent>
