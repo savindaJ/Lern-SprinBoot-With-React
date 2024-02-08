@@ -156,8 +156,8 @@ export default function EmployeeTable() {
         getAllEmployees();
       }, []);
 
-      function deleteEmployee(){
-        axios.delete('http://localhost:8080/spring/employee/delete/'+email,{
+      function deleteEmployee(selectedEmail){
+        axios.delete('http://localhost:8080/spring/employee/delete/'+selectedEmail,{
           headers: {
             'Content-Type': 'application/json',
           },
@@ -174,18 +174,20 @@ export default function EmployeeTable() {
       }
 
       function updateEmployee(){
-        
         const json = {
           email: email,
           name: id,
           address: address,
           phone: name,
-          // imageUrl: image.name
+          imageUrl: file
         }
   
         const employee = JSON.stringify(json);
+
+        console.log(employee);
+        console.log('my image :',image);
   
-         axios.put('http://localhost:8080/spring/employee/', employee,{
+         axios.put('http://localhost:8080/spring/employee/update', employee,{
           headers: {
             'Content-Type': 'application/json',
           },
@@ -193,6 +195,11 @@ export default function EmployeeTable() {
           .then(response => {
             console.log(response);
             alert('Employee updated successfully');
+            setId('');
+            setAddress('');
+            setEmail('');
+            setName('');
+            setImage(null);
             getAllEmployees();
           })
           .catch(error => {
@@ -221,7 +228,7 @@ export default function EmployeeTable() {
 
       function deleteFunction(email){
         setEmail(email);
-        deleteEmployee();
+        deleteEmployee(email);
       }
 
   return (
@@ -264,6 +271,7 @@ export default function EmployeeTable() {
                 setEmail(row.email);
                 setName(row.phone);
                 setImage(`http://localhost:3000/uploads/`+`${row.imageUrl}`);
+                setFile(row.imageUrl);
               }}>
                     <EditIcon sx={{color:'blue'}}/>
                 </IconButton>

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -54,7 +55,8 @@ public class EmployeeService {
         file.delete();
     }
 
-    public Integer getEmployeeByCode(String code){
-        return employeeRepo.findByEmployeeCode(code);
+    public Employee getEmployeeByCode(String code){
+        Optional<Employee> byId = employeeRepo.findById(code);
+        return byId.orElse(null);
     }
 }

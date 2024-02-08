@@ -40,7 +40,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employee1, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee){
         Employee employee1 = employeeService.updateEmployee(employee);
         return new ResponseEntity<>(employee1,HttpStatus.OK);
@@ -48,8 +48,14 @@ public class EmployeeController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Employee> deleteEmployee(@PathVariable String id){
-        employeeService.deleteEmployee(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Employee employeeByCode = employeeService.getEmployeeByCode(id);
+        if (employeeByCode == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            employeeService.deleteEmployee(id);
+            employeeService.deleteFile(employeeByCode.getImageUrl());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     @PostMapping("/upload")
@@ -62,7 +68,7 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/delete/*", method = RequestMethod.OPTIONS)
+    @RequestMapping(value = "/*", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> handleOptions() {
         return ResponseEntity.ok()
                 .allow(HttpMethod.DELETE)

@@ -13,5 +13,5 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryImplementati
 public interface EmployeeRepo extends JpaRepositoryImplementation<Employee,String> {
     @Modifying
     @Query("SELECT e FROM Employee e WHERE e.email = ?1")
-    Integer findByEmployeeCode(String email);
+    Employee findByEmployeeCode(String email);
 }
