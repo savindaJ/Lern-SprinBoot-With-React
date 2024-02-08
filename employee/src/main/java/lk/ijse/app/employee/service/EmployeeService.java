@@ -4,6 +4,7 @@ import lk.ijse.app.employee.modal.Employee;
 import lk.ijse.app.employee.repo.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import java.util.UUID;
  * @since : 0.1.0
  **/
 @Service
+@Transactional
 public class EmployeeService {
     private final EmployeeRepo employeeRepo;
 
@@ -39,16 +41,20 @@ public class EmployeeService {
         return employeeRepo.save(employee);
     }
 
-    public void deleteEmployee(Long id){
+    public void deleteEmployee(String id){
         employeeRepo.deleteById(id);
-    }
-
-    public Employee getEmployeeById(Long id){
-        return employeeRepo.findById(id).orElseThrow(()->
-                new RuntimeException("Employee not found for id: "+id));
     }
 
     public void uploadFile(MultipartFile file) throws IOException {
         file.transferTo(new File("G:\\WorkZone\\SpringBootApp\\Crud\\frontend\\public\\uploads\\"+file.getOriginalFilename()));
+    }
+
+    public void deleteFile(String fileName){
+        File file = new File("G:\\WorkZone\\SpringBootApp\\Crud\\frontend\\public\\uploads\\"+fileName);
+        file.delete();
+    }
+
+    public Integer getEmployeeByCode(String code){
+        return employeeRepo.findByEmployeeCode(code);
     }
 }

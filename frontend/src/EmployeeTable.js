@@ -157,7 +157,12 @@ export default function EmployeeTable() {
       }, []);
 
       function deleteEmployee(){
-        axios.delete('http://localhost:8080/spring/employee/delete/'+id)
+        axios.delete('http://localhost:8080/spring/employee/delete/'+email,{
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        
+        })
         .then(response => {
           console.log(response);
           alert('Employee deleted successfully');
@@ -175,7 +180,7 @@ export default function EmployeeTable() {
           name: id,
           address: address,
           phone: name,
-          imageUrl: image.name
+          // imageUrl: image.name
         }
   
         const employee = JSON.stringify(json);
@@ -212,6 +217,11 @@ export default function EmployeeTable() {
           //       console.error('Error uploading file', error);
           //     });
           // }
+      }
+
+      function deleteFunction(email){
+        setEmail(email);
+        deleteEmployee();
       }
 
   return (
@@ -259,7 +269,10 @@ export default function EmployeeTable() {
                 </IconButton>
 
                 <IconButton aria-label="delete">
-                    <DeleteIcon onClick={functionopenpopup} sx={{color:'red'}} />
+                    <DeleteIcon onClick={()=>{
+                      setEmail(row.email);
+                      deleteFunction(row.email);
+                    }} sx={{color:'red'}} />
                 </IconButton>
                 </StyledTableCell>
             </StyledTableRow>
